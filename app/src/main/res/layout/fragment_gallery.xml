@@ -1,0 +1,30 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context="com.mecolab.memeticameandroid.Fragments.GalleryFragment">
+    
+        <!-- TODO: Update blank fragment layout -->
+
+
+    <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="@string/gallery_text_fragment" />
+
+    <GridView
+        android:id="@+id/gridView"
+        android:layout_width="wrap_content"
+        android:layout_height="504dp"
+        android:layout_margin="5dp"
+        android:columnWidth="100dp"
+        android:drawSelectorOnTop="true"
+        android:gravity="center"
+        android:numColumns="2"
+
+        android:stretchMode="columnWidth"
+        android:verticalSpacing="25dp"
+        android:focusable="true"
+        android:clickable="true"/>
+
+</FrameLayout>
