@@ -17,7 +17,7 @@
     <string name="NewGroupFragment.GroupTitle">Group title</string>
     <string name="NewGroupFragment.AddParticipant">AddParticipant</string>
     <string name="NewGroupActivity.Create">Create</string>
-
+    <string name="Download.error">Error while downloading file</string>
     <string name="SharedPreferences.Preferences">MemeticaMePreferences</string>
     <string name="SharedPreferences.PhoneNumber">MyPhoneNumber</string>
     <string name="SharedPreferences.Token">MyToken</string>

@@ -64,7 +64,9 @@ public class NewChatActivity extends AppCompatActivity implements
     public void onContactSelected(User contact) {
         Conversation conversation =
                 Conversation.getTwoConversation(this, User.getLoggedUser(this), contact);
+        if  (conversation == null){
 
+        }
         if (conversation == null) {
                             Conversation.createNewTwoConversation(this, User.getLoggedUser(this), contact,
                                     new Listeners.OnGetNewTwoConversationListener() {

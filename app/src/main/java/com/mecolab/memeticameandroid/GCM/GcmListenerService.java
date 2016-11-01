@@ -53,25 +53,29 @@ public class GcmListenerService extends com.google.android.gms.gcm.GcmListenerSe
 
                 }
                 else {
-                    builder.setMimeType(data.getString("mime_type"))
-                            .setContent(NetworkingManager.downloadFile(data.getString("link"), FileManager.BASE_PATH +
-                                    "/" +FileManager.generateFileName(data.getString("mime_type"))).toString());
-
+                    try {
+                        builder.setMimeType(data.getString("mime_type"))
+                                .setContent(NetworkingManager.downloadFile(data.getString("link"), FileManager.BASE_PATH +
+                                        "/" + FileManager.generateFileName(data.getString("mime_type"))).toString());
+                    }
+                    catch(Exception e){
+                        final Context context = getBaseContext();
+                        //  Toast.makeText(getBaseContext(), "Hello", Toast.LENGTH_LONG).show();
+                        Handler handler = new Handler(Looper.getMainLooper());
+                        handler.post(
+                                new Runnable()
+                                {
+                                    @Override
+                                    public void run()
+                                    {
+                                        Toast.makeText(context, R.string.Download_error, Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+                        );
+                    }
                     //new CustomTask().execute((Void[])null);
                     //
-                    final Context context = getBaseContext();
-                  //  Toast.makeText(getBaseContext(), "Hello", Toast.LENGTH_LONG).show();
-                    Handler handler = new Handler(Looper.getMainLooper());
-                    handler.post(
-                            new Runnable()
-                            {
-                                @Override
-                                public void run()
-                                {
-                                    Toast.makeText(context, "Something happened.", Toast.LENGTH_SHORT).show();
-                                }
-                            }
-                    );
+
 
 
                     content = "File received";
@@ -127,7 +131,7 @@ public class GcmListenerService extends com.google.android.gms.gcm.GcmListenerSe
 
             if (Conversation.getConversation(this, conversationId) == null) {
                 Conversation conversation = new Conversation(0, conversationId, other.mPhoneNumber,
-                        admin.mPhoneNumber, createdAt, true, participants);
+                        admin.mPhoneNumber, createdAt, false, participants);
                 conversation.save(this);
             }
         }
