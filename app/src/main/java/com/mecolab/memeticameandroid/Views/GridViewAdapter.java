@@ -28,15 +28,12 @@ public class GridViewAdapter extends ArrayAdapter<Gallery> {
         this.layoutResourceId = layoutResourceId;
         this.context = context;
         this.data = data;
-        Log.d("Ma","worksadklsda");
-        Log.d("size", String.valueOf(getCount()));
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         View row = convertView;
         ViewHolder holder ;
-        Log.d("Wait","works");
         if (row == null) {
             LayoutInflater inflater = ((Activity) context).getLayoutInflater();
             row = inflater.inflate(layoutResourceId, parent, false);

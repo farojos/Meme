@@ -11,7 +11,6 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.util.SparseArray;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -229,7 +228,6 @@ public class MainActivity extends AppCompatActivity implements
 
         @Override
         public Fragment getItem(int position) {
-            Log.d("Position",String.valueOf(position)+"kakaaaaaaaaaaaaaa");
             // getItem is called to instantiate the fragment for the given page.
             switch (position) {
                 case 0:

@@ -49,7 +49,7 @@ public class GalleryFragment extends Fragment {
         Bundle args = new Bundle();
         args.putInt(ARG_SECTION_NUMBER, sectionNumber);
         fragment.setArguments(args);
-        Log.d("Partiendo","Gallery");
+
 
         return fragment;
     }
@@ -74,6 +74,14 @@ public class GalleryFragment extends Fragment {
         final ArrayList<Gallery> gallerys = new ArrayList<>();
         String path = BASE_PATH;
         File directory = new File(path);
+        if (!directory.exists()) {
+            if (!directory.mkdirs()){
+                Log.e("DIRECTORY","Problems with directory creation");
+            }
+            else
+                Log.d("DIRECTORY","Creation done");
+
+        }
         File[] files = directory.listFiles();
         Log.d("Files", "Size: "+ files.length);
         for (int i = 0; i < files.length; i++)
