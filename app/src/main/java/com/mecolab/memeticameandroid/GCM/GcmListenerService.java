@@ -2,10 +2,14 @@ package com.mecolab.memeticameandroid.GCM;
 
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.mecolab.memeticameandroid.Activities.MainActivity;
 import com.mecolab.memeticameandroid.FileUtils.FileManager;
@@ -52,6 +56,24 @@ public class GcmListenerService extends com.google.android.gms.gcm.GcmListenerSe
                     builder.setMimeType(data.getString("mime_type"))
                             .setContent(NetworkingManager.downloadFile(data.getString("link"), FileManager.BASE_PATH +
                                     "/" +FileManager.generateFileName(data.getString("mime_type"))).toString());
+
+                    //new CustomTask().execute((Void[])null);
+                    //
+                    final Context context = getBaseContext();
+                  //  Toast.makeText(getBaseContext(), "Hello", Toast.LENGTH_LONG).show();
+                    Handler handler = new Handler(Looper.getMainLooper());
+                    handler.post(
+                            new Runnable()
+                            {
+                                @Override
+                                public void run()
+                                {
+                                    Toast.makeText(context, "Something happened.", Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                    );
+
+
                     content = "File received";
                 }
                 final Message message = builder.build();
@@ -116,7 +138,7 @@ public class GcmListenerService extends com.google.android.gms.gcm.GcmListenerSe
         PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(), 0, resultIntent, 0);
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(this)
-                        .setSmallIcon(R.mipmap.ic_launcher)
+                        .setSmallIcon(R.drawable.whatsicon)
                         .setContentTitle(title)
                         .setAutoCancel(true)
                         .setContentIntent(pendingIntent)
@@ -139,4 +161,6 @@ public class GcmListenerService extends com.google.android.gms.gcm.GcmListenerSe
 
 
 
+
 }
+
