@@ -139,7 +139,11 @@ public class MessageAdapter extends ArrayAdapter<Message> {
            // Picasso.with(parent.getContext()).load(message.mContent).into(contentView);
             final int THUMBSIZE = 64;
             final String s = Uri.parse(message.mContent).getPath();
-
+            String ss = Uri.parse(message.mContent).getPath();
+            File file = new File(ss);
+            if(file.length()/1024<700){
+                isD.put(message.mContent,true);
+            }
 
             if(!isD.containsKey(message.mContent)) {
                 Bitmap ThumbImage = ThumbnailUtils.extractThumbnail(BitmapFactory.decodeFile(s),
@@ -235,6 +239,11 @@ public class MessageAdapter extends ArrayAdapter<Message> {
             //contentView.setImageURI(Uri.parse(message.mContent));
             Bitmap thumb;
             //message.mContent
+            String ss = Uri.parse(message.mContent).getPath();
+            File file = new File(ss);
+            if(file.length()/1024<700){
+                isD.put(message.mContent,true);
+            }
 
             if(!isD.containsKey(message.mContent))
                  thumb = ThumbnailUtils.createVideoThumbnail(Uri.parse(message.mContent).getPath(), MediaStore.Images.Thumbnails.MICRO_KIND);
