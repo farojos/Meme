@@ -308,13 +308,13 @@ public class MessageAdapter extends ArrayAdapter<Message> {
                 @Override
                 public void onClick(View v) {
 
-
+                    /*
                     if(play){
                         MessageAdapter.mPlayer.pause();
                         MessageAdapter.play=false;
                         //MessageAdapter.mPlayer=null;
 
-                    } else {
+                    } else {*/
                         String s = Uri.parse(message.mContent).getPath();
                         try {
                             if(!MessageAdapter.created) {
@@ -329,7 +329,44 @@ public class MessageAdapter extends ArrayAdapter<Message> {
                         catch (Exception e ){
 
                         }
-                    }
+                    //}
+                }
+            });
+            contentView = (ImageView) view.findViewById(R.id.msg_audio_pause);
+            contentView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+
+
+                        mPlayer.pause();
+
+
+                    //}
+                }
+            });
+            contentView = (ImageView) view.findViewById(R.id.msg_audio_stop);
+            contentView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+
+
+                   mPlayer.stop();
+                    MessageAdapter.play=false;
+                    MessageAdapter.created=false;
+                    mPlayer.pause();
+                    /*String s = Uri.parse(message.mContent).getPath();
+                    try {
+                        if (!MessageAdapter.created) {
+                            mPlayer.setDataSource(s);
+                            mPlayer.prepare();
+                        }
+                        mPlayer.pause();
+                    }catch (Exception e){}*/
+                   // MessageAdapter.created=false;
+
+                    //}
                 }
             });
 
