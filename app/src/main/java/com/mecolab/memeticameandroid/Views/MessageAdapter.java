@@ -1,5 +1,7 @@
 package com.mecolab.memeticameandroid.Views;
 
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -118,6 +120,17 @@ public class MessageAdapter extends ArrayAdapter<Message> {
             EmojiconTextView contentView =
                     (EmojiconTextView) view.findViewById(R.id.MessageListItem_Content);
             contentView.setText(message.mContent);
+            final Context context = getContext();
+            contentView.setOnLongClickListener(new View.OnLongClickListener() {
+                                                   @Override
+                                                   public boolean onLongClick(View v) {
+                                                       ClipboardManager clipboard = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
+                                                       ClipData clip = ClipData.newPlainText("label", "text|"+message.mContent);
+                                                       clipboard.setPrimaryClip(clip);
+                                                       return false;
+                                                   }
+                                               });
+
         }
         else if (message.mType == Message.MessageType.IMAGE) {
 

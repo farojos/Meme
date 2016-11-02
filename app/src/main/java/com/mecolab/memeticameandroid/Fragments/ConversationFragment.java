@@ -8,6 +8,8 @@ import android.content.IntentFilter;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -80,6 +82,33 @@ public class ConversationFragment extends Fragment{
         getActivity().registerReceiver(messageReceiver,
                 new IntentFilter(MemeticameApplication.MESSAGE_RECEIVED_ACTION));
         checkSharedMedia();
+        final Context context = getContext();
+       mNewMessageView.addTextChangedListener(new TextWatcher() {
+           @Override
+           public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+           }
+
+           @Override
+           public void onTextChanged(CharSequence s, int start, int before, int count) {
+               String mem = s.toString();
+               mem=mem.split("\\|")[0];
+               if(mem.equals("text")){
+                   mNewMessageView.setText(mNewMessageView.getText().toString().split("\\|")[1]);
+                   sendMessage();
+               }
+
+
+           }
+
+           @Override
+           public void afterTextChanged(Editable s) {
+
+
+           }
+       });
+        //mNewMessageView.setOnLongClickListener(null);
+
         return view;
     }
 
