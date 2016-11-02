@@ -6,7 +6,7 @@
     <string name="title_section3">Section 3</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
-
+    <string name="action_meme_creator">Memes</string>
     <string name="MainActivity.TabConversations">Chats</string>
     <string name="MainActivity.TabContacts">Contacts</string>
     <string name="MainActivity.NewTwoConversation">New conversation</string>
@@ -62,5 +62,9 @@
         <item>Monospace</item>
     </string-array>
     <string name="title_activity_content_receiver">ContentReceiverActivity</string>
+<<<<<<< HEAD
     <string name="not_audio_file">The selected file is not a audio file</string>
+=======
+    <string name="title_activity_meme">MemeActivity</string>
+>>>>>>> origin/v_meme_creator_1
 </resources>

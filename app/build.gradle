@@ -14,14 +14,16 @@ apply plugin: 'com.google.gms.google-services'
 
 android {
     compileSdkVersion 23
-    buildToolsVersion "23.0.0"
+    buildToolsVersion "23.0.3"
 
     defaultConfig {
         applicationId "com.mecolab.memeticameandroid"
         minSdkVersion 16
-        targetSdkVersion 22
+        targetSdkVersion 25
         versionCode 1
         versionName "1.0"
+        renderscriptTargetApi 23
+        renderscriptSupportModeEnabled true
     }
     buildTypes {
         release {
@@ -53,4 +55,7 @@ dependencies {
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'com.rockerhieu.emojicon:library:+'
     compile 'com.makeramen:roundedimageview:2.2.1'
+
+    compile 'net.hockeyapp.android:HockeySDK:3.7.0'
+    compile 'ly.img.android:photo-editor-sdk:2.0.13'
 }
