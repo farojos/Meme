@@ -1,10 +1,76 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical" android:layout_width="wrap_content"
+    android:orientation="vertical" android:layout_width="100dp"
     android:padding ="10dp"
     android:background="@drawable/rounded_borders"
-    android:layout_height="wrap_content">
+    android:layout_height="100dp"
+    android:weightSum="1">
+
+    <TextView
+        android:text="TextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/size"
+        android:layout_alignBaseline="@+id/msg_image_btn"
+        android:layout_alignBottom="@+id/msg_image_btn"
+        android:layout_alignRight="@+id/MessageListItem.Content"
+        android:layout_alignEnd="@+id/MessageListItem.Content" />
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="43dp">
+
+        <com.makeramen.roundedimageview.RoundedImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/msg_audio_pause"
+            android:src="@drawable/ic_pause_light"
+            app:riv_corner_radius="30dip"
+            app:riv_border_width="0dip"
+            app:riv_border_color="#333333"
+            app:riv_mutate_background="true"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            app:riv_tile_mode="repeat"
+            app:riv_oval="true"
+            android:layout_weight="1" />
+
+        <com.makeramen.roundedimageview.RoundedImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/msg_audio_play"
+            android:src="@drawable/ic_play_light"
+            app:riv_corner_radius="30dip"
+            app:riv_border_width="0dip"
+            app:riv_border_color="#333333"
+            app:riv_mutate_background="true"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            app:riv_tile_mode="repeat"
+            app:riv_oval="true"
+            android:layout_weight="6.46" />
+
+        <com.makeramen.roundedimageview.RoundedImageView
+            android:layout_height="26dp"
+            android:id="@+id/msg_audio_play"
+            android:src="@drawable/stop"
+            app:riv_corner_radius="30dip"
+            app:riv_border_width="0dip"
+            app:riv_border_color="#333333"
+            app:riv_mutate_background="true"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            app:riv_tile_mode="repeat"
+            app:riv_oval="true"
+            android:layout_width="20dp" />
+
+    </LinearLayout>
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -16,31 +82,6 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
-
-    <com.makeramen.roundedimageview.RoundedImageView
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:layout_width="44dp"
-        android:layout_height="wrap_content"
-        android:id="@+id/msg_audio_play"
-        android:src="@drawable/ic_play_light"
-        app:riv_corner_radius="30dip"
-        app:riv_border_width="0dip"
-        app:riv_border_color="#333333"
-        app:riv_mutate_background="true"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        app:riv_tile_mode="repeat"
-        app:riv_oval="true" />
-    <TextView
-        android:text="TextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/size"
-        android:layout_alignBaseline="@+id/msg_image_btn"
-        android:layout_alignBottom="@+id/msg_image_btn"
-        android:layout_alignRight="@+id/MessageListItem.Content"
-        android:layout_alignEnd="@+id/MessageListItem.Content" />
 
 
 </LinearLayout>
