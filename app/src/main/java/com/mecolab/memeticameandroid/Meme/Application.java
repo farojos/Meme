@@ -1,4 +1,4 @@
-package com.mecolab.memeticameandroid.Activities;
+package com.mecolab.memeticameandroid.Meme;
 
 import ly.img.android.ImgLySdk;
 

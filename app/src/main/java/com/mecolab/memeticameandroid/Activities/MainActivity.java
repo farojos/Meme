@@ -22,6 +22,7 @@ import com.mecolab.memeticameandroid.Fragments.ContactsFragment;
 import com.mecolab.memeticameandroid.Fragments.ConversationsFragment;
 import com.mecolab.memeticameandroid.Fragments.GalleryFragment;
 import com.mecolab.memeticameandroid.GCM.RegistrationIntentService;
+import com.mecolab.memeticameandroid.Meme.MemeCreatorActivity;
 import com.mecolab.memeticameandroid.Models.Conversation;
 import com.mecolab.memeticameandroid.Models.User;
 import com.mecolab.memeticameandroid.Networking.Listeners;
@@ -163,6 +164,11 @@ public class MainActivity extends AppCompatActivity implements
             intent.setType(ContactsContract.Contacts.CONTENT_TYPE);
             intent.putExtra("finishActivityOnSaveCompleted", true); // Fix for 4.0.3 +
             startActivityForResult(intent, ADD_CONTACT_REQUEST);
+        }
+
+        else if (id == R.id.action_meme_creator) {
+            Intent intent = new Intent(this, MemeCreatorActivity.class);
+            startActivity(intent);
         }
 
         return super.onOptionsItemSelected(item);

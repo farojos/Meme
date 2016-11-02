@@ -1,4 +1,4 @@
-package com.mecolab.memeticameandroid.Activities;
+package com.mecolab.memeticameandroid.Meme;
 
 import android.os.Parcel;
 import android.os.Parcelable;
