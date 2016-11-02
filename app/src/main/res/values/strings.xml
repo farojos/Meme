@@ -41,8 +41,10 @@
     <string name="title_activity_public_memes">PublicMemesActivity</string>
     <string name="select_public_meme">Select public meme</string>
     <string name="title_activity_channel">ChannelActivity</string>
+    <string name='meme_audio'>Create MemeAudio</string>
     <string name="new_channel">New channel</string>
     <string name="title_activity_share_meme">ShareMemeActivity</string>
+
 
 
     <string-array name="colors_array">
@@ -60,4 +62,5 @@
         <item>Monospace</item>
     </string-array>
     <string name="title_activity_content_receiver">ContentReceiverActivity</string>
+    <string name="not_audio_file">The selected file is not a audio file</string>
 </resources>

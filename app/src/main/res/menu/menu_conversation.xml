@@ -10,6 +10,9 @@
         android:orderInCategory="99" app:showAsAction="never" />
 
     <item android:id="@+id/action_invite_contact" android:title="@string/invite_contact"
+    android:orderInCategory="100" app:showAsAction="never" />
+
+    <item android:id="@+id/action_create_mma" android:title="@string/meme_audio"
         android:orderInCategory="100" app:showAsAction="never" />
 
     <item android:id="@+id/action_settings" android:title="@string/action_settings"

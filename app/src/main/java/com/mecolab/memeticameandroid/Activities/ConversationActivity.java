@@ -13,6 +13,7 @@ import android.webkit.MimeTypeMap;
 import android.widget.Toast;
 
 import com.mecolab.memeticameandroid.Fragments.ConversationFragment;
+import com.mecolab.memeticameandroid.Fragments.GalleryFragment;
 import com.mecolab.memeticameandroid.Models.User;
 import com.mecolab.memeticameandroid.Networking.Listeners;
 import com.mecolab.memeticameandroid.R;
@@ -31,7 +32,9 @@ public class ConversationActivity extends AppCompatActivity  implements
     public static final int PICK_MEME_AUDIO_CODE = 4;
     public static final int PICK_CONTACT_CODE = 5;
     public static final int PICK_PUBLIC_MEME = 6;
-
+    public static final int PICK_MMA = 7;
+    public static final int PICK_MMA_FINAL=8;
+    public static Uri uri;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,6 +57,13 @@ public class ConversationActivity extends AppCompatActivity  implements
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            return true;
+        }
+        else if(id == R.id.action_create_mma){
+            Intent intent = new Intent();
+            intent.setType("image/*");
+            intent.setAction(Intent.ACTION_GET_CONTENT);
+            startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_MMA);
             return true;
         }
         else if (id == R.id.action_send_photo) {
@@ -118,38 +128,69 @@ public class ConversationActivity extends AppCompatActivity  implements
                     .findFragmentById(R.id.ChatActivity_ConversationFragment);
             conversationFragment.sendFileMessage(uri, type);
         }
-        else if (requestCode == PICK_IMAGE_CODE && resultCode == RESULT_OK) {
-            Uri uri = data.getData();
-            String mimeType = getContentResolver().getType(uri);
-            ConversationFragment conversationFragment =
-                    (ConversationFragment) getSupportFragmentManager()
-                            .findFragmentById(R.id.ChatActivity_ConversationFragment);
-            conversationFragment.sendFileMessage(uri, mimeType);
+        else if ((requestCode == PICK_MMA && resultCode == RESULT_OK)){
+            ConversationActivity.uri = data.getData();
+            Intent i = new Intent(this, FilePickerActivity.class);
+            // This works if you defined the intent filter
+            // Intent i = new Intent(Intent.ACTION_GET_CONTENT);
+
+            // Set these depending on your use case. These are the defaults.
+            i.putExtra(FilePickerActivity.EXTRA_ALLOW_MULTIPLE, false);
+            i.putExtra(FilePickerActivity.EXTRA_ALLOW_CREATE_DIR, false);
+            i.putExtra(FilePickerActivity.EXTRA_MODE, FilePickerActivity.MODE_FILE);
+
+            // Configure initial directory by specifying a String.
+            // You could specify a String like "/storage/emulated/0/", but that can
+            // dangerous. Always use Android's API calls to get paths to the SD-card or
+            // internal memory.
+            i.putExtra(FilePickerActivity.EXTRA_START_PATH,
+                    Environment.getExternalStorageDirectory().getPath());
+
+            startActivityForResult(i, PICK_MMA_FINAL);
         }
-        else if (requestCode == PICK_CONTACT_CODE && resultCode == RESULT_OK) {
-            String number = data.getStringExtra(User.PHONE_NUMBER);
-
-            ConversationFragment conversationFragment =
-                    (ConversationFragment) getSupportFragmentManager()
-                            .findFragmentById(R.id.ChatActivity_ConversationFragment);
-
-            boolean exists = conversationFragment.addParticipant(number, new Listeners.OnUserAddedListener() {
-                @Override
-                public void onUserAdded(boolean successful) {
-                    if(successful){
-                        Toast.makeText(ConversationActivity.this,
-                                "Contact added successfully", Toast.LENGTH_SHORT).show();
-                    }
-                    else{
-                        Toast.makeText(ConversationActivity.this,
-                                "Connection failed", Toast.LENGTH_SHORT).show();
-                    }
+        else {
+            if ((requestCode == PICK_MMA_FINAL && resultCode == RESULT_OK)) {
+                Log.d("IMAGE", ConversationActivity.uri.getPath());
+                Log.d("AUDIO", data.getData().getPath());
+                if (GalleryFragment.getMimeType(data.getData().getPath()).split("/")[0].equals("audio")) {
+                    Toast.makeText(ConversationActivity.this,
+                            "vamos conchatumadre", Toast.LENGTH_SHORT).show();
                 }
-            });
+                else {
+                    Toast.makeText(ConversationActivity.this,
+                            R.string.not_audio_file, Toast.LENGTH_SHORT).show();
+                }
+            } else if (requestCode == PICK_IMAGE_CODE && resultCode == RESULT_OK) {
+                Uri uri = data.getData();
+                String mimeType = getContentResolver().getType(uri);
+                ConversationFragment conversationFragment =
+                        (ConversationFragment) getSupportFragmentManager()
+                                .findFragmentById(R.id.ChatActivity_ConversationFragment);
+                conversationFragment.sendFileMessage(uri, mimeType);
+            } else if (requestCode == PICK_CONTACT_CODE && resultCode == RESULT_OK) {
+                String number = data.getStringExtra(User.PHONE_NUMBER);
 
-            if (!exists) {
-                Toast.makeText(ConversationActivity.this,
-                        "Contact already in group", Toast.LENGTH_SHORT).show();
+                ConversationFragment conversationFragment =
+                        (ConversationFragment) getSupportFragmentManager()
+                                .findFragmentById(R.id.ChatActivity_ConversationFragment);
+
+                boolean exists = conversationFragment.addParticipant(number, new Listeners.OnUserAddedListener() {
+                    @Override
+                    public void onUserAdded(boolean successful) {
+                        if (successful) {
+                            Toast.makeText(ConversationActivity.this,
+                                    "Contact added successfully", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(ConversationActivity.this,
+                                    "Connection failed", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+
+                if (!exists) {
+                    Toast.makeText(ConversationActivity.this,
+                            "Contact already in group", Toast.LENGTH_SHORT).show();
+                }
             }
         }
     }
