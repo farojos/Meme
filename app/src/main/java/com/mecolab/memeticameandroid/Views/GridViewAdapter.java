@@ -53,9 +53,9 @@ public class GridViewAdapter extends ArrayAdapter<Gallery> {
         holder.imageTitle.setText(item.getTitle());
         //holder.imageTitle.setGravity(Gravity.CENTER_VERTICAL | Gravity.LEFT);
        // Log.d("Vista",item.getTitle());
+        holder.image.setOnClickListener(null);
         if(item.getMime().equals("image")){
             final Uri path = item.getUri();
-            Log.d("KHA",path.getPath());
             holder.image.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -67,6 +67,28 @@ public class GridViewAdapter extends ArrayAdapter<Gallery> {
                     getContext().startActivity(i);
                 }
             });}
+        else if(item.getMime().equals("video")){
+            final Uri path = item.getUri();
+            holder.image.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent i = new Intent();
+                    i.setAction(android.content.Intent.ACTION_VIEW);
+                    i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    i.setDataAndType(path,
+                            "video/*");
+                    getContext().startActivity(i);//startActivity(i);
+                }
+            });}
+        else if(item.getMime().equals("audio")){
+
+        }
+        else if(item.getMime().equals("fotoaudio")){
+
+        }
+        else if(item.getMime().equals("other")){
+
+        }
         Bitmap bitmap = Bitmap.createScaledBitmap(item.getImage(),dpToPx(100),dpToPx(100),true);
 
         holder.image.setImageBitmap(bitmap);

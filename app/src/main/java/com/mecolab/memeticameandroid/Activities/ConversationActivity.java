@@ -1,28 +1,18 @@
 package com.mecolab.memeticameandroid.Activities;
 
-import android.app.AlertDialog;
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.media.MediaRecorder;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
-import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.webkit.MimeTypeMap;
-import android.widget.EditText;
 import android.widget.Toast;
 
-import com.mecolab.memeticameandroid.FileUtils.FileManager;
 import com.mecolab.memeticameandroid.Fragments.ConversationFragment;
-import com.mecolab.memeticameandroid.MemeticameApplication;
-import com.mecolab.memeticameandroid.Models.Message;
 import com.mecolab.memeticameandroid.Models.User;
 import com.mecolab.memeticameandroid.Networking.Listeners;
 import com.mecolab.memeticameandroid.R;
@@ -30,9 +20,6 @@ import com.nononsenseapps.filepicker.FilePickerActivity;
 import com.rockerhieu.emojicon.EmojiconGridFragment;
 import com.rockerhieu.emojicon.EmojiconsFragment;
 import com.rockerhieu.emojicon.emoji.Emojicon;
-
-import java.io.File;
-import java.io.IOException;
 
 public class ConversationActivity extends AppCompatActivity  implements
         EmojiconGridFragment.OnEmojiconClickedListener,

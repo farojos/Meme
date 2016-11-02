@@ -24,7 +24,6 @@ import com.mecolab.memeticameandroid.Models.Message;
 import com.mecolab.memeticameandroid.Models.User;
 import com.mecolab.memeticameandroid.R;
 import com.rockerhieu.emojicon.EmojiconTextView;
-import com.squareup.picasso.Picasso;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -139,7 +138,7 @@ public class MessageAdapter extends ArrayAdapter<Message> {
             ImageView contentView = (ImageView) view.findViewById(R.id.MessageListItem_Content);
            // Picasso.with(parent.getContext()).load(message.mContent).into(contentView);
             final int THUMBSIZE = 64;
-            String s = Uri.parse(message.mContent).getPath();
+            final String s = Uri.parse(message.mContent).getPath();
 
 
             if(!isD.containsKey(message.mContent)) {
@@ -157,7 +156,7 @@ public class MessageAdapter extends ArrayAdapter<Message> {
                         ClipData clip = ClipData.newPlainText("label", "file|"+message.mContent);
                         clipboard.setPrimaryClip(clip);
                         Toast.makeText(context, "Copy image success", Toast.LENGTH_SHORT).show();
-                        return false;
+                        return true;
                     }
                     });
                     b.setOnClickListener(new View.OnClickListener() {
@@ -165,9 +164,10 @@ public class MessageAdapter extends ArrayAdapter<Message> {
                         public void onClick(View v) {
                             ViewGroup row = (ViewGroup) v.getParent();
                             ImageView contentView = (ImageView) row.findViewById(R.id.MessageListItem_Content);
-                            final int THUMBSIZE = 64;
-                            Picasso.with(row.getContext()).load(message.mContent).into(contentView);
-                            //contentView.setImageBitmap(thumb);
+                            final int THUMBSIZE = 300;
+                            Bitmap ThumbImage = ThumbnailUtils.extractThumbnail(BitmapFactory.decodeFile(s),
+                                    THUMBSIZE, THUMBSIZE);
+                            contentView.setImageBitmap(ThumbImage);
                             row.removeView(v);
                             message.setisDown(true);
                             isD.put(message.mContent,true);
@@ -195,14 +195,16 @@ public class MessageAdapter extends ArrayAdapter<Message> {
             else {
                 Button b = (Button) view.findViewById(R.id.msg_image_btn);
                 ((ViewGroup)b.getParent()).removeView(b);
-                Picasso.with(parent.getContext()).load(message.mContent).into(contentView);
+
+                Bitmap ThumbImage = ThumbnailUtils.extractThumbnail(BitmapFactory.decodeFile(s),
+                        300, 300);
+                contentView.setImageBitmap(ThumbImage);
                 contentView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         Intent i = new Intent();
                         i.setAction(android.content.Intent.ACTION_VIEW);
                         i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        Log.d("PATH0",message.mContent);
                         i.setDataAndType(Uri.parse(message.mContent),
                                 "image/*");
                         getContext().startActivity(i);//startActivity(i);

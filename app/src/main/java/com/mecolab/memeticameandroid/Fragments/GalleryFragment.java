@@ -95,11 +95,12 @@ public class GalleryFragment extends Fragment {
             Log.d("Files", "Mime:" +getMimeType(files[i].getAbsolutePath()));
             Bitmap bb=null;
             String mime=getMimeType(files[i].getAbsolutePath()).split("/")[0];
+            final int THUMBSIZE = 100;
             if(mime.equals("image"))
             {
                 BitmapFactory.Options bmOptions = new BitmapFactory.Options();
-                bb = BitmapFactory.decodeFile(files[i].getAbsolutePath(),bmOptions);
-
+                bb = ThumbnailUtils.extractThumbnail(BitmapFactory.decodeFile(files[i].getAbsolutePath(),bmOptions),
+                        THUMBSIZE, THUMBSIZE);
 
                 //bitmap = Bitmap.createScaledBitmap(bitmap,100dp,dp,true);
                // bb=
