@@ -1,9 +1,13 @@
 package com.mecolab.memeticameandroid.Fragments;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.media.ThumbnailUtils;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -89,9 +93,25 @@ public class GalleryFragment extends Fragment {
         {
             Log.d("Files", "FileName:" + files[i].getName());
             Log.d("Files", "Mime:" +getMimeType(files[i].getAbsolutePath()));
+            Bitmap bb=null;
+            String mime=getMimeType(files[i].getAbsolutePath()).split("/")[0];
+            if(mime.equals("image"))
+            {
+                BitmapFactory.Options bmOptions = new BitmapFactory.Options();
+                bb = BitmapFactory.decodeFile(files[i].getAbsolutePath(),bmOptions);
+
+
+                //bitmap = Bitmap.createScaledBitmap(bitmap,100dp,dp,true);
+               // bb=
+            }
+            else if(mime.equals("video")) {
+                bb=ThumbnailUtils.createVideoThumbnail(Uri.fromFile(files[i]).getPath(), MediaStore.Images.Thumbnails.MICRO_KIND);
+            }
             //getContext().getContentResolver().getType(Uri.fromFile(files[i]));
             ///gallerys.add(new Gallery())
-            gallerys.add(new Gallery(null, i+" "+files[i].getName()));
+
+            gallerys.add(new Gallery(bb,files[i].getName(),mime,Uri.fromFile(files[i])));
+
         }
 
         return gallerys;

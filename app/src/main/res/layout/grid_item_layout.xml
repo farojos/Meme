@@ -2,18 +2,29 @@
 
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:orientation="vertical" android:layout_width="match_parent"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:padding="@dimen/activity_horizontal_margin">
 
-        <TextView
-            android:id="@+id/gallery_text"
-            android:layout_width="250dp"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:layout_weight="0.5"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true" />
 
-    </RelativeLayout>
+        <ImageView
+        android:layout_width="100dp"
+        android:id="@+id/gallery_image"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_height="100dp" />
+
+    <TextView
+        android:id="@+id/gallery_text"
+        android:layout_width="200dp"
+        android:gravity="left|center"
+        android:layout_weight="0.5"
+        android:layout_height="100dp"
+        tools:text="A"
+
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+</RelativeLayout>

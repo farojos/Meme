@@ -2,6 +2,10 @@ package com.mecolab.memeticameandroid.Views;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -39,7 +43,7 @@ public class GridViewAdapter extends ArrayAdapter<Gallery> {
             row = inflater.inflate(layoutResourceId, parent, false);
             holder = new ViewHolder();
             holder.imageTitle = (TextView) row.findViewById(R.id.gallery_text);
-         //   holder.image = (ImageView) row.findViewById(R.id.gallery_item_image);
+            holder.image = (ImageView) row.findViewById(R.id.gallery_image);
             row.setTag(holder);
         } else {
             holder = (ViewHolder) row.getTag();
@@ -47,9 +51,31 @@ public class GridViewAdapter extends ArrayAdapter<Gallery> {
 
         Gallery item = (Gallery) data.get(position);
         holder.imageTitle.setText(item.getTitle());
+        //holder.imageTitle.setGravity(Gravity.CENTER_VERTICAL | Gravity.LEFT);
        // Log.d("Vista",item.getTitle());
-      //  holder.image.setImageBitmap(item.getImage());
+        if(item.getMime().equals("image")){
+            final Uri path = item.getUri();
+            Log.d("KHA",path.getPath());
+            holder.image.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent i = new Intent();
+                    i.setAction(android.content.Intent.ACTION_VIEW);
+                    i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    i.setDataAndType(path,
+                            "image/*");
+                    getContext().startActivity(i);
+                }
+            });}
+        Bitmap bitmap = Bitmap.createScaledBitmap(item.getImage(),dpToPx(100),dpToPx(100),true);
+
+        holder.image.setImageBitmap(bitmap);
         return row;
+    }
+    public int dpToPx(int dp) {
+        DisplayMetrics displayMetrics = getContext().getResources().getDisplayMetrics();
+        int px = Math.round(dp * (displayMetrics.xdpi / DisplayMetrics.DENSITY_DEFAULT));
+        return px;
     }
     @Override
     public void notifyDataSetChanged() {

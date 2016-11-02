@@ -149,6 +149,7 @@ public class MessageAdapter extends ArrayAdapter<Message> {
                                 @Override
                                 public void onClick(View v) {
                                     Intent i = new Intent();
+                                    Log.d("PATH0",message.mContent);
                                     i.setAction(android.content.Intent.ACTION_VIEW);
                                     i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                                     i.setDataAndType(Uri.parse(message.mContent),
@@ -175,6 +176,7 @@ public class MessageAdapter extends ArrayAdapter<Message> {
                         Intent i = new Intent();
                         i.setAction(android.content.Intent.ACTION_VIEW);
                         i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        Log.d("PATH0",message.mContent);
                         i.setDataAndType(Uri.parse(message.mContent),
                                 "image/*");
                         getContext().startActivity(i);//startActivity(i);
