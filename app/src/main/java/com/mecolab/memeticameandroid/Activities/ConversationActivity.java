@@ -18,6 +18,7 @@ import android.widget.Toast;
 import com.mecolab.memeticameandroid.FileUtils.FileManager;
 import com.mecolab.memeticameandroid.Fragments.ConversationFragment;
 import com.mecolab.memeticameandroid.Fragments.GalleryFragment;
+import com.mecolab.memeticameandroid.Meme.MemeCreatorActivity;
 import com.mecolab.memeticameandroid.Models.User;
 import com.mecolab.memeticameandroid.Networking.Listeners;
 import com.mecolab.memeticameandroid.R;
@@ -46,6 +47,7 @@ public class ConversationActivity extends AppCompatActivity  implements
     public static final int PICK_PUBLIC_MEME = 6;
     public static final int PICK_MMA = 7;
     public static final int PICK_MMA_FINAL=8;
+    public static final int MOMO =  9 ;
     public static Uri uri;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -119,6 +121,10 @@ public class ConversationActivity extends AppCompatActivity  implements
             Intent intent = new Intent(this, ContactsActivity.class);
             startActivityForResult(intent, PICK_CONTACT_CODE);
             return true;
+        }
+        else if(id == R.id.action_meme_creator_conversation){
+            Intent intent = new Intent(this, MemeCreatorActivity.class);
+            startActivity(intent);
         }
         return super.onOptionsItemSelected(item);
     }

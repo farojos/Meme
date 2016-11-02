@@ -17,4 +17,7 @@
 
     <item android:id="@+id/action_settings" android:title="@string/action_settings"
         android:orderInCategory="101" app:showAsAction="never" />
+    <item android:id="@+id/action_meme_creator_conversation"
+        android:title="@string/action_meme_creator"
+        android:orderInCategory="100" app:showAsAction="never" />
 </menu>

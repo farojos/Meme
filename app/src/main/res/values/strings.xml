@@ -62,9 +62,9 @@
         <item>Monospace</item>
     </string-array>
     <string name="title_activity_content_receiver">ContentReceiverActivity</string>
-<<<<<<< HEAD
+
     <string name="not_audio_file">The selected file is not a audio file</string>
-=======
+
     <string name="title_activity_meme">MemeActivity</string>
->>>>>>> origin/v_meme_creator_1
+
 </resources>
