@@ -81,6 +81,18 @@ public class GridViewAdapter extends ArrayAdapter<Gallery> {
                 }
             });}
         else if(item.getMime().equals("audio")){
+            final Uri path = item.getUri();
+            holder.image.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent i = new Intent();
+                    i.setAction(android.content.Intent.ACTION_VIEW);
+                    i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    i.setDataAndType(path,
+                            "audio/*");
+                    getContext().startActivity(i);//startActivity(i);
+                }
+            });
 
         }
         else if(item.getMime().equals("fotoaudio")){

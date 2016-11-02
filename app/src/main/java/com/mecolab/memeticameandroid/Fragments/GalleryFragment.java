@@ -108,6 +108,12 @@ public class GalleryFragment extends Fragment {
             else if(mime.equals("video")) {
                 bb=ThumbnailUtils.createVideoThumbnail(Uri.fromFile(files[i]).getPath(), MediaStore.Images.Thumbnails.MICRO_KIND);
             }
+            else if (mime.equals("audio"))
+            {
+                Bitmap icon = BitmapFactory.decodeResource(getContext().getResources(),
+                        R.drawable.audio_im);
+                bb=icon;
+            }
             //getContext().getContentResolver().getType(Uri.fromFile(files[i]));
             ///gallerys.add(new Gallery())
 
