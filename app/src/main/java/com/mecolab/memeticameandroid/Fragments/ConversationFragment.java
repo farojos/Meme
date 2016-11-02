@@ -83,7 +83,7 @@ public class ConversationFragment extends Fragment{
                 new IntentFilter(MemeticameApplication.MESSAGE_RECEIVED_ACTION));
         checkSharedMedia();
         final Context context = getContext();
-       mNewMessageView.addTextChangedListener(new TextWatcher() {
+        mNewMessageView.addTextChangedListener(new TextWatcher() {
            @Override
            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -95,7 +95,17 @@ public class ConversationFragment extends Fragment{
                mem=mem.split("\\|")[0];
                if(mem.equals("text")){
                    mNewMessageView.setText(mNewMessageView.getText().toString().split("\\|")[1]);
+                   Toast.makeText(context, "Sending file", Toast.LENGTH_SHORT).show();
                    sendMessage();
+               }
+               else if(mem.equals("file"))
+               {
+                   Uri path = Uri.parse(mNewMessageView.getText().toString().split("\\|")[1]);
+                   mNewMessageView.setText("");
+                   String mime = GalleryFragment.getMimeType(path.getPath());
+                   Toast.makeText(context, "Sending file", Toast.LENGTH_SHORT).show();
+                   sendFileMessage(path,mime);
+
                }
 
 

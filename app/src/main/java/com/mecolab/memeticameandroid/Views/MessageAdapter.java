@@ -111,6 +111,7 @@ public class MessageAdapter extends ArrayAdapter<Message> {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         View view = convertView;
+        final Context context = getContext();
         final Message message = mMessages.get(position);
         view = mInflater.inflate(getLayout(message.mType), parent, false);
         if (view == null) {
@@ -120,13 +121,14 @@ public class MessageAdapter extends ArrayAdapter<Message> {
             EmojiconTextView contentView =
                     (EmojiconTextView) view.findViewById(R.id.MessageListItem_Content);
             contentView.setText(message.mContent);
-            final Context context = getContext();
+
             contentView.setOnLongClickListener(new View.OnLongClickListener() {
                                                    @Override
                                                    public boolean onLongClick(View v) {
                                                        ClipboardManager clipboard = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
                                                        ClipData clip = ClipData.newPlainText("label", "text|"+message.mContent);
                                                        clipboard.setPrimaryClip(clip);
+                                                       Toast.makeText(context, "Copy Success", Toast.LENGTH_SHORT).show();
                                                        return false;
                                                    }
                                                });
@@ -146,7 +148,18 @@ public class MessageAdapter extends ArrayAdapter<Message> {
                 contentView.setImageBitmap(ThumbImage);
 
                 Button b = (Button) view.findViewById(R.id.msg_image_btn);
-                if(!isD.containsKey(message.mContent))
+                if(!isD.containsKey(message.mContent)){
+                    //final Context context = getContext();
+                    contentView.setOnLongClickListener(new View.OnLongClickListener() {
+                    @Override
+                    public boolean onLongClick(View v) {
+                        ClipboardManager clipboard = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
+                        ClipData clip = ClipData.newPlainText("label", "file|"+message.mContent);
+                        clipboard.setPrimaryClip(clip);
+                        Toast.makeText(context, "Copy image success", Toast.LENGTH_SHORT).show();
+                        return false;
+                    }
+                    });
                     b.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
@@ -172,7 +185,7 @@ public class MessageAdapter extends ArrayAdapter<Message> {
                             });
 
                         }
-                    });
+                    });}
                 else
                 {
                     ((ViewGroup)b.getParent()).removeView(b);
@@ -193,6 +206,16 @@ public class MessageAdapter extends ArrayAdapter<Message> {
                         i.setDataAndType(Uri.parse(message.mContent),
                                 "image/*");
                         getContext().startActivity(i);//startActivity(i);
+                    }
+                });
+                contentView.setOnLongClickListener(new View.OnLongClickListener() {
+                    @Override
+                    public boolean onLongClick(View v) {
+                        ClipboardManager clipboard = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
+                        ClipData clip = ClipData.newPlainText("label", "file|"+message.mContent);
+                        clipboard.setPrimaryClip(clip);
+                        Toast.makeText(context, "Copy image success", Toast.LENGTH_SHORT).show();
+                        return true;
                     }
                 });
             }
@@ -222,7 +245,17 @@ public class MessageAdapter extends ArrayAdapter<Message> {
             contentView.setImageBitmap(thumb);
 
             Button b = (Button) view.findViewById(R.id.msg_video_btn);
-            if(!isD.containsKey(message.mContent))
+            if(!isD.containsKey(message.mContent)){
+                contentView.setOnLongClickListener(new View.OnLongClickListener() {
+                    @Override
+                    public boolean onLongClick(View v) {
+                        ClipboardManager clipboard = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
+                        ClipData clip = ClipData.newPlainText("label", "file|"+message.mContent);
+                        clipboard.setPrimaryClip(clip);
+                        Toast.makeText(context, "Copy video success", Toast.LENGTH_SHORT).show();
+                        return true;
+                    }
+                });
             b.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -247,7 +280,7 @@ public class MessageAdapter extends ArrayAdapter<Message> {
                     });
 
                 }
-            });
+            });}
             else
             {
                 ((ViewGroup)b.getParent()).removeView(b);
@@ -259,6 +292,16 @@ public class MessageAdapter extends ArrayAdapter<Message> {
         else if (message.mType == Message.MessageType.AUDIO){
             final MediaPlayer mPlayer = new MediaPlayer();
             ImageView contentView = (ImageView) view.findViewById(R.id.msg_audio_play);
+            contentView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    ClipboardManager clipboard = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
+                    ClipData clip = ClipData.newPlainText("label", "file|"+message.mContent);
+                    clipboard.setPrimaryClip(clip);
+                    Toast.makeText(context, "Copy audio success", Toast.LENGTH_SHORT).show();
+                    return true;
+                }
+            });
             contentView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -291,6 +334,16 @@ public class MessageAdapter extends ArrayAdapter<Message> {
         }
         else if (message.mType == Message.MessageType.OTHER ) {
             ImageView contentView = (ImageView) view.findViewById(R.id.MessageListItem_ClipImage);
+            contentView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    ClipboardManager clipboard = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
+                    ClipData clip = ClipData.newPlainText("label", "file|"+message.mContent);
+                    clipboard.setPrimaryClip(clip);
+                    Toast.makeText(context, "Copy file success", Toast.LENGTH_SHORT).show();
+                    return true;
+                }
+            });
             TextView fileName = (TextView) view.findViewById(R.id.MessageListItem_FileName);
             try {
                 fileName.setText(String.valueOf(message.mMimeType.split("/")[1].toUpperCase()));
@@ -314,6 +367,16 @@ public class MessageAdapter extends ArrayAdapter<Message> {
         else if (message.mType == Message.MessageType.NOT_SET) {
             TextView contentView = (TextView) view.findViewById(R.id.MessageListItem_Content);
             contentView.setText(message.mContent);
+            contentView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    ClipboardManager clipboard = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
+                    ClipData clip = ClipData.newPlainText("label", "file|"+message.mContent);
+                    clipboard.setPrimaryClip(clip);
+                    Toast.makeText(context, "Copy file success", Toast.LENGTH_SHORT).show();
+                    return true;
+                }
+            });
         }
 
         TextView authorView = (TextView) view.findViewById(R.id.MessageListItem_Author);
