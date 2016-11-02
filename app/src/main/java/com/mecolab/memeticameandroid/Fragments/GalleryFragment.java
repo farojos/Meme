@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.MimeTypeMap;
 import android.widget.GridView;
 
 import com.mecolab.memeticameandroid.Models.Gallery;
@@ -87,6 +88,8 @@ public class GalleryFragment extends Fragment {
         for (int i = 0; i < files.length; i++)
         {
             Log.d("Files", "FileName:" + files[i].getName());
+            Log.d("Files", "Mime:" +getMimeType(files[i].getAbsolutePath()));
+            //getContext().getContentResolver().getType(Uri.fromFile(files[i]));
             ///gallerys.add(new Gallery())
             gallerys.add(new Gallery(null, i+" "+files[i].getName()));
         }
@@ -99,6 +102,14 @@ public class GalleryFragment extends Fragment {
         if (mListener != null) {
             mListener.onFragmentInteraction(uri);
         }
+    }
+    public static String getMimeType(String url) {
+        String type = null;
+        String extension = MimeTypeMap.getFileExtensionFromUrl(url);
+        if (extension != null) {
+            type = MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension);
+        }
+        return type;
     }
 
     @Override

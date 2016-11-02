@@ -107,15 +107,15 @@ public class MainActivity extends AppCompatActivity implements
         actionBar.addTab(
                 actionBar.newTab()
                         .setText(R.string.MainActivity_TabContacts)
-                        .setTabListener(tabListener));
+                        .setTabListener(tabListener),false);
         actionBar.addTab(
                 actionBar.newTab()
                         .setText(R.string.MainActivity_TabConversations)
-                        .setTabListener(tabListener));
+                        .setTabListener(tabListener),true);
         actionBar.addTab(
                   actionBar.newTab()
                           .setText(R.string.MainActivity_TabGallery)
-                          .setTabListener(tabListener));
+                          .setTabListener(tabListener),false);
 
 
         Intent intent = new Intent(this, RegistrationIntentService.class);
@@ -258,7 +258,7 @@ public class MainActivity extends AppCompatActivity implements
 
         @Override
         public int getCount() {
-            // Show 2 total pages.
+            // Show 3 total pages.
             return 3;
         }
 
