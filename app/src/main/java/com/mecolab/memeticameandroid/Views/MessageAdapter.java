@@ -345,13 +345,7 @@ public class MessageAdapter extends ArrayAdapter<Message> {
             contentView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
-
-
                         mPlayer.pause();
-
-
-                    //}
                 }
             });
             contentView = (ImageView) view.findViewById(R.id.msg_audio_stop);

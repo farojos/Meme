@@ -94,7 +94,12 @@ public class GalleryFragment extends Fragment {
             Log.d("Files", "FileName:" + files[i].getName());
             Log.d("Files", "Mime:" +getMimeType(files[i].getAbsolutePath()));
             Bitmap bb=null;
+            //Log.d("Files", "Mime:" +files[i].getAbsolutePath().replace(" ",""));
+
             String mime=getMimeType(files[i].getAbsolutePath()).split("/")[0];
+            if (mime.equals("application")){
+            mime=getMimeType(files[i].getAbsolutePath());
+            }
             final int THUMBSIZE = 100;
             if(mime.equals("image"))
             {
@@ -112,6 +117,11 @@ public class GalleryFragment extends Fragment {
             {
                 Bitmap icon = BitmapFactory.decodeResource(getContext().getResources(),
                         R.drawable.audio_im);
+                bb=icon;
+            }
+            else{
+                Bitmap icon = BitmapFactory.decodeResource(getContext().getResources(),
+                        R.drawable.clip_icon);
                 bb=icon;
             }
             //getContext().getContentResolver().getType(Uri.fromFile(files[i]));

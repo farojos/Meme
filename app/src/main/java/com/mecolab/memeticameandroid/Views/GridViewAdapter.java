@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.mecolab.memeticameandroid.Models.Gallery;
 import com.mecolab.memeticameandroid.R;
@@ -94,11 +95,26 @@ public class GridViewAdapter extends ArrayAdapter<Gallery> {
                 }
             });
 
+
         }
         else if(item.getMime().equals("fotoaudio")){
 
         }
-        else if(item.getMime().equals("other")){
+        else {
+            final Uri path = item.getUri();
+            final String mime = item.getMime();
+            holder.image.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent i = new Intent(Intent.ACTION_VIEW);
+                    i.setDataAndType(path, mime);
+                    try {
+                        getContext().startActivity(i);
+                    } catch (Exception e) {
+                        Toast.makeText(getContext(), "Can't open this type of file", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
 
         }
         Bitmap bitmap = Bitmap.createScaledBitmap(item.getImage(),dpToPx(100),dpToPx(100),true);
