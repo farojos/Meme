@@ -91,6 +91,8 @@ public class GalleryFragment extends Fragment {
         Log.d("Files", "Size: "+ files.length);
         for (int i = 0; i < files.length; i++)
         {
+            if(files[i].isDirectory())
+                continue;
             Log.d("Files", "FileName:" + files[i].getName());
             Log.d("Files", "Mime:" +getMimeType(files[i].getAbsolutePath()));
             Bitmap bb=null;

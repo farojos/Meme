@@ -1,10 +1,13 @@
 package com.mecolab.memeticameandroid.Activities;
 
 import android.content.Intent;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Base64;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -12,6 +15,7 @@ import android.view.View;
 import android.webkit.MimeTypeMap;
 import android.widget.Toast;
 
+import com.mecolab.memeticameandroid.FileUtils.FileManager;
 import com.mecolab.memeticameandroid.Fragments.ConversationFragment;
 import com.mecolab.memeticameandroid.Fragments.GalleryFragment;
 import com.mecolab.memeticameandroid.Models.User;
@@ -21,6 +25,14 @@ import com.nononsenseapps.filepicker.FilePickerActivity;
 import com.rockerhieu.emojicon.EmojiconGridFragment;
 import com.rockerhieu.emojicon.EmojiconsFragment;
 import com.rockerhieu.emojicon.emoji.Emojicon;
+
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 public class ConversationActivity extends AppCompatActivity  implements
         EmojiconGridFragment.OnEmojiconClickedListener,
@@ -130,6 +142,8 @@ public class ConversationActivity extends AppCompatActivity  implements
         }
         else if ((requestCode == PICK_MMA && resultCode == RESULT_OK)){
             ConversationActivity.uri = data.getData();
+           /* String a  = getRealPathFromURI(uri);
+            Log.d("Uri",Uri.parse(uri.getPath()).getPath());*/
             Intent i = new Intent(this, FilePickerActivity.class);
             // This works if you defined the intent filter
             // Intent i = new Intent(Intent.ACTION_GET_CONTENT);
@@ -154,7 +168,29 @@ public class ConversationActivity extends AppCompatActivity  implements
                 Log.d("AUDIO", data.getData().getPath());
                 if (GalleryFragment.getMimeType(data.getData().getPath()).split("/")[0].equals("audio")) {
                     Toast.makeText(ConversationActivity.this,
-                            "vamos conchatumadre", Toast.LENGTH_SHORT).show();
+                            "Procesando", Toast.LENGTH_SHORT).show();
+                        String path = "" ;
+
+                        try {
+                            String Image = FileManager.loadBase64(getBaseContext(), ConversationActivity.uri);
+                            path = FileManager.saveBase64(Image,"image/jpeg")  ;
+                            Log.d("PATH",path);
+                        }
+                        catch (IOException e){}
+                       /* String audio = FileManager.loadBase64(getBaseContext(), data.getData());
+                        String tot = Image+ "SEPARATOR" + audio ;
+                        ConversationFragment conversationFragment =
+                                (ConversationFragment) getSupportFragmentManager()
+                                        .findFragmentById(R.id.ChatActivity_ConversationFragment);
+                                        */
+                        //String save = FileManager.saveBase64(tot,"mma");
+
+                        //conversationFragment.sendFileMessage(Image, audio);
+                       // Log.d("IMAGE", Image);
+                       // Log.d("AUDIO", tot);
+                        zip(new String[]{path,data.getData().getPath()},FileManager.BASE_PATH+"/momazo.zip");
+
+
                 }
                 else {
                     Toast.makeText(ConversationActivity.this,
@@ -209,5 +245,49 @@ public class ConversationActivity extends AppCompatActivity  implements
                 (ConversationFragment) getSupportFragmentManager()
                         .findFragmentById(R.id.ChatActivity_ConversationFragment);
         conversationFragment.onEmojiconClicked(emojicon);
+    }
+    public void zip(String[] _files, String zipFileName) {
+        int BUFFER = Base64.DEFAULT;
+        try {
+            BufferedInputStream origin = null;
+            FileOutputStream dest = new FileOutputStream(zipFileName);
+            ZipOutputStream out = new ZipOutputStream(new BufferedOutputStream(
+                    dest));
+            byte data[] = new byte[BUFFER];
+
+            for (int i = 0; i < _files.length; i++) {
+                Log.v("Compress", "Adding: " + _files[i]);
+                FileInputStream fi = new FileInputStream(_files[i]);
+                origin = new BufferedInputStream(fi, BUFFER);
+
+                ZipEntry entry = new ZipEntry(_files[i].substring(_files[i].lastIndexOf("/") + 1));
+                out.putNextEntry(entry);
+                int count;
+
+                while ((count = origin.read(data, 0, BUFFER)) != -1) {
+                    out.write(data, 0, count);
+                }
+                origin.close();
+            }
+
+            out.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    private String getRealPathFromURI(Uri contentURI) {
+
+        String thePath = "no-path-found";
+        String[] filePathColumn = {MediaStore.Images.Media.DISPLAY_NAME};
+        Cursor cursor = getContentResolver().query(contentURI, filePathColumn, null, null, null);
+        if(cursor.moveToFirst()){
+            int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+            thePath = cursor.getString(columnIndex);
+            Log.d("INTPATH",thePath);
+            String a = cursor.getString(1);
+        }
+
+        cursor.close();
+        return  thePath;
     }
 }
