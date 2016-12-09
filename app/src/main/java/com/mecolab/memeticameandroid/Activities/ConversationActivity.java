@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Base64;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -29,10 +28,16 @@ import com.rockerhieu.emojicon.emoji.Emojicon;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
 
 public class ConversationActivity extends AppCompatActivity  implements
@@ -194,7 +199,14 @@ public class ConversationActivity extends AppCompatActivity  implements
                         //conversationFragment.sendFileMessage(Image, audio);
                        // Log.d("IMAGE", Image);
                        // Log.d("AUDIO", tot);
-                        zip(new String[]{path,data.getData().getPath()},FileManager.BASE_PATH+"/momazo.zip");
+                        String timestamp = new SimpleDateFormat("yyyyMMddhhmmss").format(new Date());
+                        zip(new String[]{path,data.getData().getPath()},FileManager.BASE_PATH+"/"+timestamp+".mma");
+                        unpackZip(FileManager.BASE_PATH, "/momazo.mma");
+                        Toast.makeText(ConversationActivity.this,
+                            "FotoAudio nombre: "+timestamp+".mma", Toast.LENGTH_LONG).show();
+
+
+
 
 
                 }
@@ -236,6 +248,118 @@ public class ConversationActivity extends AppCompatActivity  implements
             }
         }
     }
+    public static String[] getOnlyStrin(String path, String zipname)
+    {
+        InputStream is;
+        ZipInputStream zis;
+        String dir = zipname.replace(".mma","");
+        dir = path + dir ;
+        dir = dir + "/";
+        String[] retorno = new String[2];
+        File directory = new File(dir);
+        if (!directory.exists()) {
+            if (!directory.mkdirs()){
+                Log.e("DIRECTORY","Problems with directory creation");
+            }
+            else
+                Log.d("DIRECTORY","Creation done");
+
+        }
+        try
+        {
+            is = new FileInputStream(path + zipname);
+            zis = new ZipInputStream(new BufferedInputStream(is));
+            ZipEntry ze;
+
+            while((ze = zis.getNextEntry()) != null)
+            {
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                byte[] buffer = new byte[1024];
+                int count;
+
+                String filename = ze.getName();
+               // FileOutputStream fout = new FileOutputStream(dir +filename);
+                String mime = GalleryFragment.getMimeType(filename);
+                if(mime.split("/")[0].equals("image"))
+                    retorno[0]=dir +filename;
+                else
+                    retorno[1]=dir+filename;
+                // reading and writing
+
+               // fout.close();
+                zis.closeEntry();
+            }
+
+            zis.close();
+        }
+        catch(IOException e)
+        {
+            e.printStackTrace();
+            return new String[0];
+        }
+
+        return retorno;
+    }
+
+    public static String[] unpackZip(String path, String zipname)
+    {
+        InputStream is;
+        ZipInputStream zis;
+        String dir = zipname.replace(".mma","");
+        dir = path + dir ;
+        dir = dir + "/";
+        String[] retorno = new String[2];
+        File directory = new File(dir);
+        if (!directory.exists()) {
+            if (!directory.mkdirs()){
+                Log.e("DIRECTORY","Problems with directory creation");
+            }
+            else
+                Log.d("DIRECTORY","Creation done");
+
+        }
+        try
+        {
+            is = new FileInputStream(path + zipname);
+            zis = new ZipInputStream(new BufferedInputStream(is));
+            ZipEntry ze;
+
+            while((ze = zis.getNextEntry()) != null)
+            {
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                byte[] buffer = new byte[1024];
+                int count;
+
+                String filename = ze.getName();
+                FileOutputStream fout = new FileOutputStream(dir +filename);
+                String mime = GalleryFragment.getMimeType(filename);
+                if(mime.split("/")[0].equals("image"))
+                    retorno[0]=dir +filename;
+                else
+                    retorno[1]=dir+filename;
+                // reading and writing
+                while((count = zis.read(buffer)) != -1)
+                {
+                    baos.write(buffer, 0, count);
+                    byte[] bytes = baos.toByteArray();
+                    fout.write(bytes);
+                    baos.reset();
+                }
+
+                fout.close();
+                zis.closeEntry();
+            }
+
+            zis.close();
+        }
+        catch(IOException e)
+        {
+            e.printStackTrace();
+            return new String[0];
+        }
+
+        return retorno;
+    }
 
     @Override
     public void onEmojiconBackspaceClicked(View view) {
@@ -252,8 +376,9 @@ public class ConversationActivity extends AppCompatActivity  implements
                         .findFragmentById(R.id.ChatActivity_ConversationFragment);
         conversationFragment.onEmojiconClicked(emojicon);
     }
+    private static final int BUFFER = 2048;
     public void zip(String[] _files, String zipFileName) {
-        int BUFFER = Base64.DEFAULT;
+        //int BUFFER = Base64.DEFAULT;
         try {
             BufferedInputStream origin = null;
             FileOutputStream dest = new FileOutputStream(zipFileName);
@@ -296,4 +421,7 @@ public class ConversationActivity extends AppCompatActivity  implements
         cursor.close();
         return  thePath;
     }
+
+
+
 }

@@ -73,11 +73,6 @@ public class GcmListenerService extends com.google.android.gms.gcm.GcmListenerSe
                                 }
                         );
                     }
-                    //new CustomTask().execute((Void[])null);
-                    //
-
-
-
                     content = "File received";
                 }
                 final Message message = builder.build();

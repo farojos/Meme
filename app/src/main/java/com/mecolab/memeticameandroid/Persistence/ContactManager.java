@@ -1,10 +1,14 @@
 package com.mecolab.memeticameandroid.Persistence;
 
+import android.Manifest;
 import android.content.ContentResolver;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.provider.ContactsContract;
+import android.support.v4.content.ContextCompat;
 
 import com.mecolab.memeticameandroid.Models.User;
 import com.mecolab.memeticameandroid.Networking.Listeners;
@@ -69,6 +73,13 @@ public class ContactManager {
         public ArrayList<User> getPhoneContacts(Context context) {
             if (mResolver == null) mResolver = context.getContentResolver();
             ArrayList<User> contacts = new ArrayList<>();
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M ) {
+                int permissionCheck = ContextCompat.checkSelfPermission(context,
+                        Manifest.permission.READ_CONTACTS);
+                if (permissionCheck ==  PackageManager.PERMISSION_DENIED ){
+                    return contacts;
+                }
+            }
             Cursor cursor = mResolver.query(ContactsContract.Contacts.CONTENT_URI, null, null, null,
                     ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME + " ASC");
             if(cursor.moveToFirst()) {

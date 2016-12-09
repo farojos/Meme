@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 import android.webkit.MimeTypeMap;
 import android.widget.GridView;
 
+import com.mecolab.memeticameandroid.Activities.ConversationActivity;
 import com.mecolab.memeticameandroid.Models.Gallery;
 import com.mecolab.memeticameandroid.R;
 import com.mecolab.memeticameandroid.Views.GridViewAdapter;
@@ -86,9 +87,16 @@ public class GalleryFragment extends Fragment {
             else
                 Log.d("DIRECTORY","Creation done");
 
-        }
+        }/*
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M ) {
+            int permissionCheck = ContextCompat.checkSelfPermission(this.getActivity(),
+                    Manifest.permission.READ_EXTERNAL_STORAGE);
+            if (permissionCheck ==  PackageManager.PERMISSION_DENIED ){
+                return gallerys;
+            }
+        }*/
         File[] files = directory.listFiles();
-        Log.d("Files", "Size: "+ files.length);
+//        Log.d("Files", "Size: "+ files.length);
         for (int i = 0; i < files.length; i++)
         {
             if(files[i].isDirectory())
@@ -97,8 +105,12 @@ public class GalleryFragment extends Fragment {
             Log.d("Files", "Mime:" +getMimeType(files[i].getAbsolutePath()));
             Bitmap bb=null;
             //Log.d("Files", "Mime:" +files[i].getAbsolutePath().replace(" ",""));
+            String mime="";
 
-            String mime=getMimeType(files[i].getAbsolutePath()).split("/")[0];
+            if (files[i].getName().contains("mma") )
+                mime="fotoaudio";
+            else
+              mime=getMimeType(files[i].getAbsolutePath()).split("/")[0];
             if (mime.equals("application")){
             mime=getMimeType(files[i].getAbsolutePath());
             }
@@ -111,6 +123,44 @@ public class GalleryFragment extends Fragment {
 
                 //bitmap = Bitmap.createScaledBitmap(bitmap,100dp,dp,true);
                // bb=
+            }
+            else if(mime.equals("fotoaudio")){
+                String fotopath = Uri.fromFile(files[i]).getPath().toString();
+                fotopath=fotopath.replace(".mma","");
+                fotopath = fotopath + "/";
+                File dir= new File(fotopath);
+                if (!dir.exists()) {
+                    if (!dir.mkdirs()){
+                        Log.e("DIRECTORY","Problems with directory creation");
+                    }
+                    else
+                    {
+                        String[] unpacked =  ConversationActivity.unpackZip(path,"/"+files[i].getName());
+                        Gallery g = new Gallery(null,files[i].getName(),mime,Uri.parse(unpacked[0]));
+                        g.setSongUri(Uri.parse(unpacked[1]));
+                        gallerys.add(g);
+                        continue;
+
+                    }
+
+                }
+                else{
+                    String[] unpacked =  ConversationActivity.getOnlyStrin(path,"/"+files[i].getName());
+                    if(!new File(unpacked[0]).exists())
+                        unpacked =  ConversationActivity.unpackZip(path,"/"+files[i].getName());
+                    if(!new File(unpacked[1]).exists())
+                        unpacked =  ConversationActivity.unpackZip(path,"/"+files[i].getName());
+                    File audio =  new File(unpacked[1]);
+                    File image = new File(unpacked[0]);
+                    Gallery g = new Gallery(null,files[i].getName(),mime,Uri.fromFile(image));
+                    g.setSongUri(Uri.fromFile(audio));
+                    gallerys.add(g);
+                    continue;
+
+                }
+
+
+
             }
             else if(mime.equals("video")) {
                 bb=ThumbnailUtils.createVideoThumbnail(Uri.fromFile(files[i]).getPath(), MediaStore.Images.Thumbnails.MICRO_KIND);
@@ -182,4 +232,5 @@ public class GalleryFragment extends Fragment {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
+
 }

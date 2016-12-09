@@ -11,7 +11,6 @@ import com.mecolab.memeticameandroid.Models.User;
 import com.mecolab.memeticameandroid.R;
 
 import java.util.ArrayList;
-import java.util.List;
 
 
 public class UserAdapter extends ArrayAdapter<User> {

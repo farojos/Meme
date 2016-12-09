@@ -5,25 +5,30 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.media.MediaPlayer;
 import android.media.ThumbnailUtils;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.mecolab.memeticameandroid.Activities.ConversationActivity;
+import com.mecolab.memeticameandroid.Fragments.GalleryFragment;
 import com.mecolab.memeticameandroid.Models.Message;
 import com.mecolab.memeticameandroid.Models.User;
 import com.mecolab.memeticameandroid.R;
-import com.rockerhieu.emojicon.EmojiconTextView;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -33,6 +38,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+
+import us.feras.mdv.MarkdownView;
 
 public class MessageAdapter extends ArrayAdapter<Message> {
     private LayoutInflater mInflater;
@@ -112,14 +119,181 @@ public class MessageAdapter extends ArrayAdapter<Message> {
         View view = convertView;
         final Context context = getContext();
         final Message message = mMessages.get(position);
-        view = mInflater.inflate(getLayout(message.mType), parent, false);
-        if (view == null) {
+        if(message.mContent.contains("mma"))
+            view = mInflater.inflate( R.layout.message_image_audio_list_item, parent, false);
+        else
             view = mInflater.inflate(getLayout(message.mType), parent, false);
+        if (view == null) {
+            if(message.mContent.contains("mma"))
+                view = mInflater.inflate( R.layout.message_image_audio_list_item, parent, false);
+            else
+
+                view = mInflater.inflate(getLayout(message.mType), parent, false);
         }
+
+        /*
+        if(message.mSender.equals(User.getLoggedUser(context).mPhoneNumber)){
+            //view.set
+            //android:layout_alignParentRight="true"
+            //android:layout_gravity="right"
+            ViewGroup.LayoutParams params = view.getLayoutParams();
+            params.
+
+
+            view.setLayoutParams(params);
+            Log.d("SENDER",message.mSender);
+            Log.d("SENDER","Number: WIII:  "+User.getLoggedUser(context).mPhoneNumber);
+        }
+        else
+        {
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            params.weight = ViewGroup.LayoutParams.WRAP_CONTENT;
+            params.height = ViewGroup.LayoutParams.WRAP_CONTENT;
+            params.gravity = Gravity.LEFT;
+            Log.d("SENDER",message.mSender);
+            Log.d("SENDER","Number: D: :C :  "+User.getLoggedUser(context).mPhoneNumber);
+
+            view.setLayoutParams(params);
+        }*/
+        //User.getLoggedUser(context).mPhoneNumber;
+        if(message.mContent.contains("mma")){
+            //view = mInflater.inflate( R.layout.message_image_audio_list_item, parent, false);
+            String path = GalleryFragment.BASE_PATH;
+            ImageView contentView = (ImageView) view.findViewById(R.id.image_audio_item);
+            String fotopath = message.mContent;
+            fotopath=fotopath.replace(".mma","");
+            fotopath = fotopath + "/";
+            fotopath = fotopath.replace("file://","");
+            File dir= new File(fotopath);
+            Uri audioUri=null;
+            Uri imageUri=null;
+            if (!dir.exists()) {
+                if (!dir.mkdirs()){
+                    Log.e("DIRECTORY","Problems with directory creation");
+                    String[] unpacked =  ConversationActivity.unpackZip(path,"/"+message.mContent.split("/")[message.mContent.split("/").length-1]);
+                    //String[] unpacked =  ConversationActivity.getOnlyStrin(path,"/"+message.mContent.split("/")[message.mContent.split("/").length-1]);
+                    if(!new File(unpacked[0]).exists())
+                        unpacked =  ConversationActivity.unpackZip(path,"/"+message.mContent.split("/")[message.mContent.split("/").length-1]);
+                    if(!new File(unpacked[1]).exists())
+                        unpacked =  ConversationActivity.unpackZip(path,"/"+message.mContent.split("/")[message.mContent.split("/").length-1]);
+                    File audio =  new File(unpacked[1]);
+                    File image = new File(unpacked[0]);
+                    audioUri = Uri.fromFile(audio);
+                    imageUri = Uri.fromFile(image);
+                }
+                else
+                {
+                    String[] unpacked =  ConversationActivity.unpackZip(path,"/"+message.mContent.split("/")[message.mContent.split("/").length-1]);
+                    //String[] unpacked =  ConversationActivity.getOnlyStrin(path,"/"+message.mContent.split("/")[message.mContent.split("/").length-1]);
+                    if(!new File(unpacked[0]).exists())
+                        unpacked =  ConversationActivity.unpackZip(path,"/"+message.mContent.split("/")[message.mContent.split("/").length-1]);
+                    if(!new File(unpacked[1]).exists())
+                        unpacked =  ConversationActivity.unpackZip(path,"/"+message.mContent.split("/")[message.mContent.split("/").length-1]);
+                    File audio =  new File(unpacked[1]);
+                    File image = new File(unpacked[0]);
+                    audioUri = Uri.fromFile(audio);
+                    imageUri = Uri.fromFile(image);
+                   // Gallery g = new Gallery(null,files[i].getName(),mime,Uri.parse(unpacked[0]));
+                  //  g.setSongUri(Uri.parse(unpacked[1]));
+                    //gallerys.add(g);
+                  //  continue;
+
+                }
+
+            }
+            else{
+                String[] unpacked =  ConversationActivity.getOnlyStrin(path,"/"+message.mContent.split("/")[message.mContent.split("/").length-1]);
+                if(!new File(unpacked[0]).exists())
+                    unpacked =  ConversationActivity.unpackZip(path,"/"+message.mContent.split("/")[message.mContent.split("/").length-1]);
+                if(!new File(unpacked[1]).exists())
+                    unpacked =  ConversationActivity.unpackZip(path,"/"+message.mContent.split("/")[message.mContent.split("/").length-1]);
+                File audio =  new File(unpacked[1]);
+                File image = new File(unpacked[0]);
+                audioUri = Uri.fromFile(audio);
+                imageUri = Uri.fromFile(image);
+                //Gallery g = new Gallery(null,files[i].getName(),mime,Uri.fromFile(image));
+                //g.setSongUri(Uri.fromFile(audio));
+               // gallerys.add(g);
+               //continue;
+
+            }
+
+
+            Glide.with(context).load(imageUri.getPath()).into(contentView);
+            final Uri auU=audioUri;
+            final MediaPlayer mPlayer = new MediaPlayer();
+            ImageView contentView2 = (ImageView) view.findViewById(R.id.msg_audio_play);
+
+            contentView2.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    String s = auU.getPath();
+                    try {
+                        if(!MessageAdapter.created) {
+                            mPlayer.setDataSource(s);
+                            mPlayer.prepare();
+                        }
+                        mPlayer.start();
+                        MessageAdapter.play=true;
+                        MessageAdapter.created=true;
+                        MessageAdapter.mPlayer=mPlayer;
+                    }
+                    catch (Exception e ){
+
+                    }
+                }
+            });
+            contentView2 = (ImageView) view.findViewById(R.id.msg_audio_pause);
+            contentView2.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mPlayer.pause();
+                }
+            });
+            contentView2 = (ImageView) view.findViewById(R.id.msg_audio_stop);
+            contentView2.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mPlayer.stop();
+                    MessageAdapter.play=false;
+                    MessageAdapter.created=false;
+                    mPlayer.pause();
+                }
+            });
+
+        }else
         if (message.mType == Message.MessageType.TEXT) {
-            EmojiconTextView contentView =
-                    (EmojiconTextView) view.findViewById(R.id.MessageListItem_Content);
-            contentView.setText(message.mContent);
+            MarkdownView contentView =
+                    (MarkdownView) view.findViewById(R.id.markdownView);
+            contentView.loadMarkdown(message.mContent);
+
+            ViewGroup.LayoutParams l = view.getLayoutParams();
+
+            ViewGroup.LayoutParams currentParams = view.getLayoutParams();
+            FrameLayout.LayoutParams newHeaderParams;
+            RelativeLayout r = (RelativeLayout) view;
+            //RelativeLayout.LayoutParams laa = (RelativeLayout.LayoutParams)r.getLayoutParams();
+            int width = ViewGroup.LayoutParams.WRAP_CONTENT;
+            LinearLayout.LayoutParams lll = new LinearLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT,RelativeLayout.LayoutParams.WRAP_CONTENT);
+            lll.gravity=Gravity.RIGHT;
+            r.setLayoutParams(lll);
+            view.setLayoutParams(lll);
+            int height = ViewGroup.LayoutParams.WRAP_CONTENT;
+            int gravity = Gravity.RIGHT;/*
+            if (currentParams != null) {
+                newHeaderParams = new FrameLayout.LayoutParams(view.getLayoutParams()); //to copy all the margins
+                newHeaderParams.width = width;
+                newHeaderParams.height = height;
+                newHeaderParams.gravity = gravity;
+            } else {
+                newHeaderParams = new FrameLayout.LayoutParams(width, height, gravity);
+            }
+            view.setLayoutParams(newHeaderParams);*/
+            //LinearLayout.LayoutParams l = (LinearLayout.LayoutParams) view.getLayoutParams();
+            //l.gravity= Gravity.RIGHT;
+
+
+
 
             contentView.setOnLongClickListener(new View.OnLongClickListener() {
                                                    @Override
@@ -137,7 +311,7 @@ public class MessageAdapter extends ArrayAdapter<Message> {
 
             ImageView contentView = (ImageView) view.findViewById(R.id.MessageListItem_Content);
            // Picasso.with(parent.getContext()).load(message.mContent).into(contentView);
-            final int THUMBSIZE = 64;
+           // final int THUMBSIZE = 64;
             final String s = Uri.parse(message.mContent).getPath();
             String ss = Uri.parse(message.mContent).getPath();
             File file = new File(ss);
@@ -146,10 +320,10 @@ public class MessageAdapter extends ArrayAdapter<Message> {
             }
 
             if(!isD.containsKey(message.mContent)) {
-                Bitmap ThumbImage = ThumbnailUtils.extractThumbnail(BitmapFactory.decodeFile(s),
-                        THUMBSIZE, THUMBSIZE);
-                contentView.setImageBitmap(ThumbImage);
-
+               // Bitmap ThumbImage = ThumbnailUtils.extractThumbnail(BitmapFactory.decodeFile(s),
+               //         THUMBSIZE, THUMBSIZE);
+                //contentView.setImageBitmap(ThumbImage);
+                Glide.with(parent.getContext()).load(message.mContent).into(contentView);
                 Button b = (Button) view.findViewById(R.id.msg_image_btn);
                 if(!isD.containsKey(message.mContent)){
                     //final Context context = getContext();
@@ -169,9 +343,10 @@ public class MessageAdapter extends ArrayAdapter<Message> {
                             ViewGroup row = (ViewGroup) v.getParent();
                             ImageView contentView = (ImageView) row.findViewById(R.id.MessageListItem_Content);
                             final int THUMBSIZE = 300;
-                            Bitmap ThumbImage = ThumbnailUtils.extractThumbnail(BitmapFactory.decodeFile(s),
-                                    THUMBSIZE, THUMBSIZE);
-                            contentView.setImageBitmap(ThumbImage);
+                            //Bitmap ThumbImage = ThumbnailUtils.extractThumbnail(BitmapFactory.decodeFile(s),
+                           //         THUMBSIZE, THUMBSIZE);
+                            //contentView.setImageBitmap(ThumbImage);
+                            Glide.with(context).load(message.mContent).into(contentView);
                             row.removeView(v);
                             message.setisDown(true);
                             isD.put(message.mContent,true);
@@ -200,9 +375,10 @@ public class MessageAdapter extends ArrayAdapter<Message> {
                 Button b = (Button) view.findViewById(R.id.msg_image_btn);
                 ((ViewGroup)b.getParent()).removeView(b);
 
-                Bitmap ThumbImage = ThumbnailUtils.extractThumbnail(BitmapFactory.decodeFile(s),
-                        300, 300);
-                contentView.setImageBitmap(ThumbImage);
+               // Bitmap ThumbImage = ThumbnailUtils.extractThumbnail(BitmapFactory.decodeFile(s),
+               //         300, 300);
+                Glide.with(parent.getContext()).load(message.mContent).into(contentView);
+                //contentView.setImageBitmap(ThumbImage);
                 contentView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -422,19 +598,25 @@ public class MessageAdapter extends ArrayAdapter<Message> {
         }
 
         TextView authorView = (TextView) view.findViewById(R.id.MessageListItem_Author);
-        authorView.setText(User.getUserOrCreate(getContext(), message.mSender).mName);
+        if(!message.mContent.contains("mma"))
+            authorView.setText(User.getUserOrCreate(getContext(), message.mSender).mName);
+
         if(message.mType == Message.MessageType.AUDIO || message.mType == Message.MessageType.VIDEO || message.mType == Message.MessageType.IMAGE) {
             String s = Uri.parse(message.mContent).getPath();
             File file = new File(s);
             authorView = (TextView) view.findViewById(R.id.size);
             authorView.setText(User.getUserOrCreate(getContext(), message.mSender).mName+"-Size: "+file.length()/1024+"KB");
         }
-        if(message.mType == Message.MessageType.OTHER) {
+        if(message.mType == Message.MessageType.OTHER && !message.mContent.contains("mma")) {
             String s = Uri.parse(message.mContent).getPath();
             File file = new File(s);
             //authorView = (TextView) view.findViewById(R.id.size);
-            authorView.setText(User.getUserOrCreate(getContext(), message.mSender).mName+"-Size: "+file.length()/1024+"KB");
+
+                authorView.setText(User.getUserOrCreate(getContext(), message.mSender).mName);
+
         }
+
+
         return view;
     }
 

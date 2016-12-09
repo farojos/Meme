@@ -2,33 +2,25 @@ package com.mecolab.memeticameandroid.Meme;
 
 import android.content.Context;
 import android.content.Intent;
-import android.media.Image;
-import android.media.MediaScannerConnection;
 import android.net.Uri;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import ly.img.android.ui.utilities.PermissionRequest;
-
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.mecolab.memeticameandroid.FileUtils.FileManager;
 import com.mecolab.memeticameandroid.R;
 
 import java.io.File;
 
-import ly.img.android.sdk.models.constant.Directory;
-import ly.img.android.sdk.models.state.CameraSettings;
 import ly.img.android.sdk.models.state.EditorSaveSettings;
 import ly.img.android.sdk.models.state.manager.SettingsList;
 import ly.img.android.ui.activities.CameraPreviewActivity;
 import ly.img.android.ui.activities.CameraPreviewBuilder;
-
-import static android.app.Activity.RESULT_OK;
+import ly.img.android.ui.utilities.PermissionRequest;
 
 public class MemeCreatorActivity extends AppCompatActivity implements PermissionRequest.Response {
     public static final String TAG = "MainActivity";
@@ -65,6 +57,7 @@ public class MemeCreatorActivity extends AppCompatActivity implements Permission
         new CameraPreviewBuilder(this)
                 .setSettingsList(settingsList)
                 .startActivityForResult(this, CAMERA_PREVIEW_RESULT);
+
     }
 
     @Override
@@ -103,6 +96,7 @@ public class MemeCreatorActivity extends AppCompatActivity implements Permission
 
             Toast.makeText(this, "Image Save on: " + resultPath, Toast.LENGTH_LONG).show();
         }
+        super.onBackPressed();
     }
 
     //Important for Android 6.0 and above permisstion request, don't forget this!

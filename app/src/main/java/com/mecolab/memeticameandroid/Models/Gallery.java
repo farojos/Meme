@@ -6,7 +6,13 @@ import android.net.Uri;
 public class Gallery {
 	private Bitmap image;
 	private String title;
-
+	private Uri songUri;
+    public Uri getSongUri(){
+        return this.songUri;
+    }
+    public void setSongUri(Uri songUri){
+        this.songUri=songUri;
+    }
 
 	public Uri getUri() {
 		return uri;

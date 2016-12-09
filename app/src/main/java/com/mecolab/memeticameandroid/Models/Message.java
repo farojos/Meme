@@ -12,13 +12,14 @@ import java.util.Arrays;
 
 public class Message {
     public enum MessageType{
-        TEXT, IMAGE, VIDEO, AUDIO, OTHER, NOT_SET
+        TEXT, IMAGE, VIDEO, AUDIO, OTHER, NOT_SET, FOTOAUDIO
     }
 
-    private static String[] ImageMimeTypes = { "image/jpeg", "image/jpg", "image/png" };
+    private static String[] ImageMimeTypes = { "image/jpeg", "image/jpg", "image/png", "image/gif" };
     private static String[] VideoMimeTypes = { "video/x-mpeg", "video/quicktime", "video/mp4" };
     private static String[] AudioMimeTypes = { "audio/mpeg3", "audio/x-mpeg-3", "audio/mpeg",
             "audio/mp3","audio/mp4","audio/ogg", "audio/wav"};
+
     private static String TextMimeType = "plain/text";
 
     public int mId;

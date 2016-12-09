@@ -47,8 +47,8 @@ public class ConversationFragment extends Fragment{
     EmojiconEditText mNewMessageView;
     @Bind(R.id.ConversationFragment_SendButton)
     ImageButton mSendButton;
-    @Bind(R.id.emoticon_button)
-    ImageButton mEmoticonButton;
+   // @Bind(R.id.emoticon_button)
+    //ImageButton mEmoticonButton;
     @Bind(R.id.emojicons)
     FrameLayout mEmoticonLayout;
 
@@ -238,12 +238,12 @@ public class ConversationFragment extends Fragment{
                 sendMessage();
             }
         });
-        mEmoticonButton.setOnClickListener(new View.OnClickListener() {
+        /*mEmoticonButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 setEmojiconFragment(false);
             }
-        });
+        });*/
 
     }
 

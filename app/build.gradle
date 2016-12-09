@@ -39,6 +39,9 @@ repositories {
         url "https://mint.splunk.com/gradle/"
     }
     maven { url 'https://maven.fabric.io/public' }
+    maven {
+        url 'https://dl.bintray.com/9elements/ly.img.android/'
+    }
 }
 
 dependencies {
@@ -55,7 +58,9 @@ dependencies {
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'com.rockerhieu.emojicon:library:+'
     compile 'com.makeramen:roundedimageview:2.2.1'
-
+    compile 'us.feras.mdv:markdownview:1.1.0'
     compile 'net.hockeyapp.android:HockeySDK:3.7.0'
-    compile 'ly.img.android:photo-editor-sdk:2.0.13'
+    compile 'ly.img.android:photo-editor-sdk:2.0.15'
+    compile 'com.github.bumptech.glide:glide:3.5.2'
+
 }
